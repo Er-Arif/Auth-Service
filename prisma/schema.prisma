@@ -16,6 +16,7 @@ model App {
   config      AppConfig?
   identities  Identity[]
   otpCodes    OtpCode[]
+  refreshTokens RefreshToken[]
   auditLogs   AuditLog[]
   createdAt   DateTime       @default(now()) @map("created_at")
   updatedAt   DateTime       @updatedAt @map("updated_at")

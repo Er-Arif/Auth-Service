@@ -1,3 +1,4 @@
+const { extendZodWithOpenApi } = require("@asteasolutions/zod-to-openapi");
 const { z } = require("zod");
 const {
   OTP_PURPOSES,
@@ -5,6 +6,8 @@ const {
   APP_STATUS,
   DELIVERY_CHANNELS,
 } = require("../config/constants");
+
+extendZodWithOpenApi(z);
 
 const uuidSchema = z.string().uuid();
 const targetTypeSchema = z.enum([TARGET_TYPES.EMAIL, TARGET_TYPES.PHONE]);

@@ -9,12 +9,13 @@ function errorHandler(error, req, res, next) {
   }
 
   if (error instanceof ZodError) {
+    const hasTargetInvalid = error.issues.some((issue) => issue.message === "TARGET_INVALID");
     return res.status(422).json(
       errorResponse({
-        message: "Validation failed",
+        message: hasTargetInvalid ? "Invalid target value" : "Validation failed",
         errors: error.issues.map((issue) => ({
           field: issue.path.join(".") || undefined,
-          code: "VALIDATION_ERROR",
+          code: /^[A-Z0-9_]+$/.test(issue.message) ? issue.message : "VALIDATION_ERROR",
         })),
       }),
     );

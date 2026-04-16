@@ -14,6 +14,25 @@ function generateSpec() {
       version: "1.0.0",
       description: "OpenAPI spec generated from shared route metadata and Zod schemas.",
     },
+    components: {
+      securitySchemes: {
+        appHeaders: {
+          type: "apiKey",
+          in: "header",
+          name: "x-app-id",
+        },
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+        internalAdminKey: {
+          type: "apiKey",
+          in: "header",
+          name: "x-internal-admin-key",
+        },
+      },
+    },
     servers: [
       {
         url: env.API_BASE_PATH,

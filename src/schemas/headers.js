@@ -13,8 +13,13 @@ const adminHeadersSchema = z.object({
   "x-internal-admin-key": z.string().trim().min(1),
 });
 
+const appUserHeadersSchema = appHeadersSchema.merge(authHeadersSchema);
+const appAdminHeadersSchema = appHeadersSchema.merge(adminHeadersSchema);
+
 module.exports = {
   appHeadersSchema,
   authHeadersSchema,
   adminHeadersSchema,
+  appUserHeadersSchema,
+  appAdminHeadersSchema,
 };
