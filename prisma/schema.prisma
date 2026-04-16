@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model App {
+  id          String         @id @default(uuid()) @db.Uuid
+  appId       String         @unique @map("app_id")
+  name        String
+  appKeyHash  String         @map("app_key_hash")
+  status      String
+  config      AppConfig?
+  identities  Identity[]
+  otpCodes    OtpCode[]
+  auditLogs   AuditLog[]
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  @@map("apps")
+}
+
+model AppConfig {
+  id                           String   @id @default(uuid()) @db.Uuid
+  appId                        String   @unique @map("app_id")
+  defaultTargetType            String   @map("default_target_type")
+  otpExpiryMinutes             Int      @map("otp_expiry_minutes")
+  resendCooldownSeconds        Int      @map("resend_cooldown_seconds")
+  maxAttempts                  Int      @map("max_attempts")
+  maxRequestsPerHourPerTarget  Int      @map("max_requests_per_hour_per_target")
+  maxRequestsPerHourPerIp      Int      @map("max_requests_per_hour_per_ip")
+  maxResendCount               Int      @default(3) @map("max_resend_count")
+  activeChannel                String   @map("active_channel")
+  emailProvider                String   @map("email_provider")
+  smsProvider                  String   @map("sms_provider")
+  accessTokenTtlMinutes        Int      @map("access_token_ttl_minutes")
+  refreshTokenTtlDays          Int      @map("refresh_token_ttl_days")
+  createdAt                    DateTime @default(now()) @map("created_at")
+  updatedAt                    DateTime @updatedAt @map("updated_at")
+  app                          App      @relation(fields: [appId], references: [appId], onDelete: Cascade)
+
+  @@map("app_configs")
+}
+
+model Identity {
+  id            String         @id @default(uuid()) @db.Uuid
+  appId         String         @map("app_id")
+  identityType  String         @map("identity_type")
+  identityValue String         @map("identity_value")
+  isVerified    Boolean        @default(false) @map("is_verified")
+  metadataJson  Json?          @map("metadata_json")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  app           App            @relation(fields: [appId], references: [appId], onDelete: Cascade)
+  refreshTokens RefreshToken[]
+
+  @@unique([appId, identityType, identityValue])
+  @@index([appId, identityType, identityValue], map: "idx_identities_lookup")
+  @@map("identities")
+}
+
+model OtpCode {
+  id          String   @id @default(uuid()) @db.Uuid
+  appId       String   @map("app_id")
+  targetType  String   @map("target_type")
+  targetValue String   @map("target_value")
+  purpose     String
+  otpHash     String   @map("otp_hash")
+  expiresAt   DateTime @map("expires_at")
+  attempts    Int      @default(0)
+  maxAttempts Int      @map("max_attempts")
+  resendCount Int      @default(0) @map("resend_count")
+  isUsed      Boolean  @default(false) @map("is_used")
+  createdAt   DateTime @default(now()) @map("created_at")
+  usedAt      DateTime? @map("used_at")
+  ipAddress   String?  @map("ip_address")
+  deviceId    String?  @map("device_id")
+  app         App      @relation(fields: [appId], references: [appId], onDelete: Cascade)
+
+  @@index([appId, targetType, targetValue, purpose, isUsed, expiresAt, createdAt], map: "idx_otp_lookup")
+  @@map("otp_codes")
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid()) @db.Uuid
+  appId      String    @map("app_id")
+  identityId String    @map("identity_id") @db.Uuid
+  tokenHash  String    @unique @map("token_hash")
+  expiresAt  DateTime  @map("expires_at")
+  isRevoked  Boolean   @default(false) @map("is_revoked")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  revokedAt  DateTime? @map("revoked_at")
+  deviceId   String?   @map("device_id")
+  app        App       @relation(fields: [appId], references: [appId], onDelete: Cascade)
+  identity   Identity  @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  @@index([appId, identityId, isRevoked, expiresAt], map: "idx_refresh_token_identity_lookup")
+  @@map("refresh_tokens")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  appId       String   @map("app_id")
+  eventType   String   @map("event_type")
+  targetType  String?  @map("target_type")
+  targetValue String?  @map("target_value")
+  ipAddress   String?  @map("ip_address")
+  deviceId    String?  @map("device_id")
+  status      String
+  message     String
+  metadataJson Json?   @map("metadata_json")
+  createdAt   DateTime @default(now()) @map("created_at")
+  app         App      @relation(fields: [appId], references: [appId], onDelete: Cascade)
+
+  @@index([appId, eventType, status, createdAt], map: "idx_audit_logs_filter")
+  @@index([appId, targetType, targetValue, createdAt], map: "idx_audit_logs_target_filter")
+  @@map("audit_logs")
+}

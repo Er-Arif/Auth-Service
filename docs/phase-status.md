@@ -23,16 +23,28 @@ Remaining:
 
 ## Phase 1: Database design
 
-Status: In progress
+Status: Completed
 
-Planned:
+Built:
 - Prisma schema and migrations
 - Explicit indexes for app, OTP, identity, and refresh token lookups
 - Seed data for active and inactive demo apps
 
+Remaining:
+- Prisma client generation
+- Database migration execution against a live PostgreSQL instance
+
+## Phase 2: OTP core engine
+
+Status: In progress
+
+Planned:
+- OTP generation, hashing, and verification primitives
+- Attempt tracking and resend cooldown logic
+- Active OTP lookup by app, target, and purpose
+
 ## Upcoming phases
 
-- Phase 2: OTP core engine
 - Phase 3: Delivery providers
 - Phase 4: Auth APIs
 - Phase 5: Multi-app support
