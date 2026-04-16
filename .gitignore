@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.local
+coverage/
+dist/
+.DS_Store
+*.log
+/.pnp
+/.pnpm-store
+/prisma/dev.db
+/openapi.json
