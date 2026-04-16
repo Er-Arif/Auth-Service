@@ -18,8 +18,7 @@ Built:
 - Local git repository initialized
 
 Remaining:
-- Dependency installation
-- Phase 1 database schema and migrations
+- none for this phase
 
 ## Phase 1: Database design
 
@@ -31,31 +30,140 @@ Built:
 - Seed data for active and inactive demo apps
 
 Remaining:
-- Prisma client generation
-- Database migration execution against a live PostgreSQL instance
+- Migration execution still depends on a live PostgreSQL instance in the target environment
 
 ## Phase 2: OTP core engine
 
-Status: In progress
+Status: Completed
 
-Planned:
+Built:
 - OTP generation, hashing, and verification primitives
 - Attempt tracking and resend cooldown logic
 - Active OTP lookup by app, target, and purpose
 
-## Upcoming phases
+Remaining:
+- none for this phase
 
-- Phase 3: Delivery providers
-- Phase 4: Auth APIs
-- Phase 5: Multi-app support
-- Phase 6: Security layer
-- Phase 7: Identity management
-- Phase 8: Integration readiness
-- Phase 9: Logging and monitoring
-- Phase 10: SaaS readiness notes
+## Phase 3: Delivery system
 
-## Deferred future work
+Status: Completed
 
-- SMS provider implementation
-- Full OpenAPI UI
-- SaaS billing and analytics
+Built:
+- SMTP email provider using Nodemailer
+- Mock provider for development/testing
+- Resend and SMS provider scaffolds
+- Provider selection detached from OTP core
+
+Remaining:
+- Real Resend integration
+- Real SMS provider integration
+
+## Phase 4: Auth API implementation
+
+Status: Completed
+
+Built:
+- `POST /otp/send`
+- `POST /otp/verify`
+- `POST /otp/resend`
+- `POST /auth/refresh`
+- `POST /auth/logout`
+- `POST /auth/logout-all`
+- JWT access token issuance
+- Opaque refresh token issuance and hashing
+
+Remaining:
+- Full DB-backed integration verification against a live Postgres instance
+
+## Phase 5: Multi-app support
+
+Status: Completed
+
+Built:
+- App-level auth via `x-app-id` and `x-app-key`
+- Per-app configuration loading before business logic
+- Admin routes for app and config management
+- Seeded demo tenants
+
+Remaining:
+- Optional richer tenant management workflows
+
+## Phase 6: Security layer
+
+Status: Completed
+
+Built:
+- OTP hashing
+- Refresh token hashing
+- IP and target rate limit checks
+- Resend cooldown
+- Max attempts and resend count enforcement
+- Production-safe log redaction
+- Audit log persistence
+
+Remaining:
+- Harder production tuning of rate limit thresholds per deployment
+
+## Phase 7: Identity management
+
+Status: Completed
+
+Built:
+- `GET /identities/me`
+- `POST /identities/verify-contact`
+- `GET /identities/:identityId`
+- Generic identity verification and persistence flow
+
+Remaining:
+- More advanced identity metadata and contact-linking workflows
+
+## Phase 8: Integration readiness
+
+Status: Completed
+
+Built:
+- Integration guide with request examples
+- Seeded app credentials for local testing
+- OpenAPI JSON generation script
+
+Remaining:
+- Example SDK/client package if needed later
+
+## Phase 9: Logging and monitoring
+
+Status: Completed
+
+Built:
+- `GET /health`
+- `GET /metrics`
+- `GET /audit-logs`
+- Request logging
+- Cleanup worker scaffold and cleanup job
+
+Remaining:
+- Production observability stack integration
+
+## Phase 10: SaaS preparation notes
+
+Status: Documented
+
+Deferred future work:
+- Usage metering
+- Per-app quota plans
+- Dashboard and billing
+- Analytics and abuse detection
+- Stronger admin auth and internal RBAC
+
+## Verification notes
+
+Completed locally:
+- Dependency installation
+- Prisma client generation
+- OpenAPI JSON generation
+- App bootstrap smoke check
+- Spawn-free smoke test script
+
+Pending external verification:
+- Running Prisma migrations against a real PostgreSQL database
+- End-to-end API testing with live SMTP or mock workflow in a fully configured `.env`
+- GitHub push once a remote repository is configured
