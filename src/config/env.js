@@ -29,6 +29,12 @@ const envSchema = z.object({
   EMAIL_SMTP_PASS: z.string().optional().default(""),
   DEFAULT_EMAIL_PROVIDER: z.string().default("smtp"),
   DEFAULT_DELIVERY_CHANNEL: z.string().default("mock"),
+  MSG91_AUTH_KEY: z.string().optional().default(""),
+  MSG91_SMS_SENDER_ID: z.string().optional().default(""),
+  MSG91_SMS_ROUTE: z.string().default("4"),
+  MSG91_SMS_COUNTRY: z.string().default("91"),
+  MSG91_SMS_BASE_URL: z.string().url().default("https://api.msg91.com"),
+  MSG91_SMS_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
   ENABLE_DEV_OTP_LOG: z
     .union([z.boolean(), z.string()])
     .default("true")

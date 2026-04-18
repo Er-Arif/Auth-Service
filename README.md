@@ -122,5 +122,5 @@ The seed creates two apps for local testing:
 - OTP values are never returned in API responses.
 - Development-only OTP logging is controlled by `ENABLE_DEV_OTP_LOG`.
 - `POST /apps` returns a generated `app_key` in the response as an operational addition so newly created apps can actually authenticate.
-- SMS delivery is scaffolded but intentionally not implemented yet.
+- SMS delivery now supports MSG91 through the provider abstraction. Fill `MSG91_AUTH_KEY` and `MSG91_SMS_SENDER_ID`, then set an app config to `active_channel=sms` and `sms_provider=msg91`.
 - Git history is tracked locally phase by phase; pushing to GitHub still requires a remote to be configured.

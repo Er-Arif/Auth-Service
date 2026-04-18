@@ -39,7 +39,8 @@ This keeps request parsing, orchestration, persistence, and domain logic separat
 
 - `smtp` provider implemented via Nodemailer
 - `mock` provider implemented for development/testing
-- `resend` and `sms` providers scaffolded for later work
+- `msg91` SMS provider implemented through the existing SMS provider slot
+- `resend` provider remains scaffolded for later work
 
 ### Auth
 

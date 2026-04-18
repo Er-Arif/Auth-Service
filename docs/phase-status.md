@@ -51,12 +51,13 @@ Status: Completed
 Built:
 - SMTP email provider using Nodemailer
 - Mock provider for development/testing
-- Resend and SMS provider scaffolds
+- MSG91 SMS provider implementation
+- Resend provider scaffold
 - Provider selection detached from OTP core
 
 Remaining:
 - Real Resend integration
-- Real SMS provider integration
+- Additional SMS providers beyond MSG91
 
 ## Phase 4: Auth API implementation
 
