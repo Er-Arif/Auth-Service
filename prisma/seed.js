@@ -1,3 +1,4 @@
+require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const { DEFAULT_OTP_POLICY, DELIVERY_CHANNELS, EMAIL_PROVIDERS, SMS_PROVIDERS, TARGET_TYPES, APP_STATUS } = require("../src/config/constants");
