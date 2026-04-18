@@ -4,7 +4,12 @@ const { successResponse } = require("../../utils/response");
 
 class AppController {
   async createApp(req, res) {
-    const result = await appService.createApp({ ...req.validated.body, bcrypt });
+    const result = await appService.createApp({
+      appId: req.validated.body.app_id,
+      name: req.validated.body.name,
+      status: req.validated.body.status,
+      bcrypt,
+    });
     res.status(201).json(
       successResponse({
         message: "App created successfully",
