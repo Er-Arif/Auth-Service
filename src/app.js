@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -27,6 +28,7 @@ function createApp() {
   app.use(requestLogger);
   app.use(requestContext);
 
+  app.use('/demo', express.static(path.resolve(process.cwd(), 'demo')));
   app.use(env.API_BASE_PATH, routes);
   app.use(notFoundHandler);
   app.use(errorHandler);

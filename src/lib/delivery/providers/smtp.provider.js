@@ -28,7 +28,7 @@ const smtpProvider = {
       to: payload.targetValue,
       subject: payload.subject,
       text: payload.message,
-      html: `<p>${payload.message}</p>`,
+      html: payload.html || `<p>${payload.message}</p>`,
     });
 
     return {

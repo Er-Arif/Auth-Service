@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP Login Showcase</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="hero-panel">
+        <p class="eyebrow">Demo Frontend</p>
+        <h1>OTP Login Showcase</h1>
+        <p class="hero-copy">
+          This page shows exactly how another product can use your auth service: collect email, send
+          OTP, verify it, create a session, and fetch the logged-in identity.
+        </p>
+
+        <div class="hero-card">
+          <h2>Flow</h2>
+          <ol>
+            <li>Enter email</li>
+            <li>Call <code>/otp/send</code></li>
+            <li>Enter the OTP from email</li>
+            <li>Call <code>/otp/verify</code></li>
+            <li>Use the returned tokens</li>
+          </ol>
+        </div>
+
+        <div class="hero-card muted-card">
+          <p>
+            Local demo note: this page includes app credentials for learning and testing only. In a
+            real product, app secrets should stay on your backend.
+          </p>
+        </div>
+      </aside>
+
+      <main class="app-panel">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <p class="section-label">Step 1</p>
+              <h2>Request OTP</h2>
+            </div>
+            <span class="status-pill" id="sendPill">Idle</span>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              <span>API Base URL</span>
+              <input id="apiBaseUrl" type="text" />
+            </label>
+            <label>
+              <span>App ID</span>
+              <input id="appId" type="text" value="ride_app" />
+            </label>
+            <label>
+              <span>App Key</span>
+              <input id="appKey" type="text" value="ride_app_secret_123" />
+            </label>
+            <label>
+              <span>Device ID</span>
+              <input id="deviceId" type="text" value="demo-browser-device" />
+            </label>
+            <label class="full-width">
+              <span>Email address</span>
+              <input id="email" type="email" placeholder="you@example.com" />
+            </label>
+            <label>
+              <span>Purpose</span>
+              <select id="purpose">
+                <option value="login">login</option>
+                <option value="signup">signup</option>
+                <option value="verify_identity">verify_identity</option>
+                <option value="reset">reset</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button id="sendOtpButton" type="button">Send OTP</button>
+            <button id="resendOtpButton" type="button" class="secondary">Resend OTP</button>
+          </div>
+
+          <p class="status-text" id="sendStatus">Waiting for email input.</p>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <p class="section-label">Step 2</p>
+              <h2>Verify OTP</h2>
+            </div>
+            <span class="status-pill" id="verifyPill">Idle</span>
+          </div>
+
+          <div class="form-grid">
+            <label class="full-width">
+              <span>OTP received in email</span>
+              <input id="otp" type="text" inputmode="numeric" maxlength="6" placeholder="123456" />
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button id="verifyOtpButton" type="button">Verify & Login</button>
+          </div>
+
+          <p class="status-text" id="verifyStatus">Waiting for OTP.</p>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <p class="section-label">Step 3</p>
+              <h2>Session Actions</h2>
+            </div>
+            <span class="status-pill" id="sessionPill">No Session</span>
+          </div>
+
+          <div class="button-row">
+            <button id="fetchMeButton" type="button" class="secondary">Fetch /identities/me</button>
+            <button id="refreshButton" type="button" class="secondary">Refresh Session</button>
+            <button id="logoutButton" type="button" class="danger">Logout</button>
+          </div>
+
+          <div class="output-grid">
+            <div>
+              <h3>Session Snapshot</h3>
+              <pre id="sessionOutput" class="output">No active session yet.</pre>
+            </div>
+            <div>
+              <h3>Last API Response</h3>
+              <pre id="responseOutput" class="output">No requests made yet.</pre>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

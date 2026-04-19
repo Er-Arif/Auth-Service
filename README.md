@@ -6,6 +6,7 @@ Reusable OTP authentication service built with Express, PostgreSQL, Prisma, and 
 
 - Multi-app OTP auth service with app-level credential validation
 - Email delivery abstraction with `smtp` via Nodemailer and `mock` mode for development
+- Branded OTP email template with both HTML and plain text delivery
 - JWT access tokens and opaque refresh tokens stored hashed in PostgreSQL
 - Centralized Zod request/response schemas structured for future OpenAPI generation
 - Route/controller/service/repository architecture

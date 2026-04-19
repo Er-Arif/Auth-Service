@@ -2,6 +2,7 @@ const { AppError } = require('../../utils/errors');
 const { normalizeTarget } = require('../../utils/normalization');
 const { maskTarget } = require('../../utils/masking');
 const { sendOtp: deliverOtp } = require('../../lib/delivery/delivery-manager');
+const { buildOtpEmail } = require('../../lib/delivery/email-template');
 const otpRepository = require('./otp.repository');
 const otpCoreService = require('./otp-core.service');
 const auditService = require('../audit/audit.service');
@@ -53,16 +54,24 @@ class OtpService {
   }
 
   buildDeliveryPayload({ appId, targetType, targetValue, otp, purpose, expiryMinutes }) {
+    const emailContent = buildOtpEmail({
+      otp,
+      purpose,
+      expiryMinutes,
+    });
+
     return {
       appId,
       targetType,
       targetValue,
       otp,
-      subject: `Your ${purpose} OTP`,
-      message: `Your OTP for ${purpose} is ${otp}. It expires in ${expiryMinutes} minutes.`,
+      subject: emailContent.subject,
+      message: emailContent.text,
+      html: emailContent.html,
       templateData: {
         otp,
         purpose,
+        expiry_minutes: expiryMinutes,
       },
     };
   }
