@@ -1,5 +1,5 @@
-const { generateOtp, hashOtp, compareOtp } = require("../../utils/crypto");
-const { addMinutes } = require("../../utils/time");
+const { generateOtp, hashOtp, compareOtp } = require('../../utils/crypto');
+const { addMinutes } = require('../../utils/time');
 
 class OtpCoreService {
   generateOtp() {

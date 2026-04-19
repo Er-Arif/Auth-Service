@@ -1,4 +1,4 @@
-const { prisma } = require("../../lib/prisma");
+const { prisma } = require('../../lib/prisma');
 
 class AuditRepository {
   async create(data) {
@@ -24,7 +24,7 @@ class AuditRepository {
     const [items, total] = await prisma.$transaction([
       prisma.auditLog.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
         take: limit,
       }),

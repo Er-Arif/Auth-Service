@@ -1,10 +1,5 @@
-const {
-  z,
-  uuidSchema,
-  deviceIdSchema,
-  successEnvelopeSchema,
-} = require("./common");
-const { emptyDataSchema } = require("./responses");
+const { z, uuidSchema, deviceIdSchema, successEnvelopeSchema } = require('./common');
+const { emptyDataSchema } = require('./responses');
 
 const refreshRequestSchema = z.object({
   refresh_token: z.string().trim().min(1),
@@ -21,7 +16,7 @@ const refreshSuccessSchema = successEnvelopeSchema(
   z.object({
     access_token: z.string(),
     refresh_token: z.string(),
-    token_type: z.literal("Bearer"),
+    token_type: z.literal('Bearer'),
     expires_in: z.number().int().positive(),
   }),
 );

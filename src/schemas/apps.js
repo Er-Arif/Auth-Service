@@ -4,7 +4,8 @@ const {
   targetTypeSchema,
   deliveryChannelSchema,
   successEnvelopeSchema,
-} = require("./common");
+} = require('./common');
+const { EMAIL_PROVIDERS, SMS_PROVIDERS } = require('../config/constants');
 
 const appConfigSchema = z.object({
   default_target_type: targetTypeSchema,
@@ -15,8 +16,8 @@ const appConfigSchema = z.object({
   max_requests_per_hour_per_ip: z.number().int().positive(),
   max_resend_count: z.number().int().positive(),
   active_channel: deliveryChannelSchema,
-  email_provider: z.string(),
-  sms_provider: z.string(),
+  email_provider: z.enum([EMAIL_PROVIDERS.SMTP, EMAIL_PROVIDERS.RESEND, EMAIL_PROVIDERS.MOCK]),
+  sms_provider: z.enum([SMS_PROVIDERS.MSG91, SMS_PROVIDERS.FAST2SMS, SMS_PROVIDERS.MOCK]),
   access_token_ttl_minutes: z.number().int().positive(),
   refresh_token_ttl_days: z.number().int().positive(),
 });
@@ -33,12 +34,14 @@ const updateAppRequestSchema = z
     status: appStatusSchema.optional(),
   })
   .refine((value) => Object.keys(value).length > 0, {
-    message: "At least one field is required",
+    message: 'At least one field is required',
   });
 
-const updateAppConfigRequestSchema = appConfigSchema.partial().refine((value) => Object.keys(value).length > 0, {
-  message: "At least one field is required",
-});
+const updateAppConfigRequestSchema = appConfigSchema
+  .partial()
+  .refine((value) => Object.keys(value).length > 0, {
+    message: 'At least one field is required',
+  });
 
 const appDataSchema = z.object({
   id: z.string().uuid(),

@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: auth_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
+  auth-service:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - mailpit
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+
+  worker:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      ENABLE_BACKGROUND_JOBS: 'true'
+    command: ['npm', 'run', 'worker']
+
+volumes:
+  postgres_data:

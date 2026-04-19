@@ -1,5 +1,5 @@
-const nodemailer = require("nodemailer");
-const { env } = require("../../../config/env");
+const nodemailer = require('nodemailer');
+const { env } = require('../../../config/env');
 
 let transporter;
 
@@ -32,8 +32,8 @@ const smtpProvider = {
     });
 
     return {
-      channel: "email",
-      provider: "smtp",
+      channel: 'email',
+      provider: 'smtp',
       accepted: true,
     };
   },

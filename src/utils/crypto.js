@@ -1,8 +1,8 @@
-const crypto = require("crypto");
-const { env } = require("../config/env");
+const crypto = require('crypto');
+const { env } = require('../config/env');
 
 function hashWithSecret(value, secret) {
-  return crypto.createHmac("sha256", secret).update(value).digest("hex");
+  return crypto.createHmac('sha256', secret).update(value).digest('hex');
 }
 
 function compareHashedValue(value, hash, secret) {
@@ -36,7 +36,7 @@ function generateOtp(length = 6) {
 }
 
 function generateOpaqueToken(byteLength = 48) {
-  return crypto.randomBytes(byteLength).toString("hex");
+  return crypto.randomBytes(byteLength).toString('hex');
 }
 
 module.exports = {

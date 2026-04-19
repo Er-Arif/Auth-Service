@@ -1,5 +1,5 @@
-const { AppError } = require("../../utils/errors");
-const identityRepository = require("./identity.repository");
+const { AppError } = require('../../utils/errors');
+const identityRepository = require('./identity.repository');
 
 function mapIdentity(identity) {
   return {
@@ -27,8 +27,8 @@ class IdentityService {
     if (!identity) {
       throw new AppError({
         statusCode: 404,
-        message: "Identity not found",
-        errors: [{ code: "IDENTITY_NOT_FOUND" }],
+        message: 'Identity not found',
+        errors: [{ code: 'IDENTITY_NOT_FOUND' }],
       });
     }
 

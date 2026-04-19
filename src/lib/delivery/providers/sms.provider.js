@@ -1,18 +1,18 @@
-const { env } = require("../../../config/env");
-const { AppError } = require("../../../utils/errors");
+const { env } = require('../../../config/env');
+const { AppError } = require('../../../utils/errors');
 
 function ensureMsg91Config() {
   if (!env.MSG91_AUTH_KEY || !env.MSG91_SMS_SENDER_ID) {
     throw new AppError({
       statusCode: 503,
-      message: "Delivery provider unavailable",
-      errors: [{ code: "DELIVERY_PROVIDER_UNAVAILABLE" }],
+      message: 'Delivery provider unavailable',
+      errors: [{ code: 'DELIVERY_PROVIDER_UNAVAILABLE' }],
     });
   }
 }
 
 function normalizeMsg91Mobile(targetValue) {
-  return targetValue.replace(/[^\d]/g, "");
+  return targetValue.replace(/[^\d]/g, '');
 }
 
 async function sendViaMsg91(payload) {
@@ -23,10 +23,10 @@ async function sendViaMsg91(payload) {
 
   try {
     const response = await fetch(`${env.MSG91_SMS_BASE_URL}/api/v2/sendsms`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         authkey: env.MSG91_AUTH_KEY,
-        "content-type": "application/json",
+        'content-type': 'application/json',
       },
       body: JSON.stringify({
         sender: env.MSG91_SMS_SENDER_ID,
@@ -51,17 +51,17 @@ async function sendViaMsg91(payload) {
       parsed = null;
     }
 
-    if (!response.ok || parsed?.type === "error") {
+    if (!response.ok || parsed?.type === 'error') {
       throw new AppError({
         statusCode: 502,
-        message: "Delivery failed",
-        errors: [{ code: "DELIVERY_FAILED" }],
+        message: 'Delivery failed',
+        errors: [{ code: 'DELIVERY_FAILED' }],
       });
     }
 
     return {
-      channel: "sms",
-      provider: "msg91",
+      channel: 'sms',
+      provider: 'msg91',
       accepted: true,
       providerResponse: parsed,
     };
@@ -72,8 +72,8 @@ async function sendViaMsg91(payload) {
 
     throw new AppError({
       statusCode: 502,
-      message: "Delivery failed",
-      errors: [{ code: "DELIVERY_FAILED" }],
+      message: 'Delivery failed',
+      errors: [{ code: 'DELIVERY_FAILED' }],
     });
   } finally {
     clearTimeout(timeout);

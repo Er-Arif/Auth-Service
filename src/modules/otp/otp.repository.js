@@ -1,4 +1,4 @@
-const { prisma } = require("../../lib/prisma");
+const { prisma } = require('../../lib/prisma');
 
 class OtpRepository {
   async createOtp(data) {
@@ -21,7 +21,7 @@ class OtpRepository {
         isUsed: false,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     });
   }

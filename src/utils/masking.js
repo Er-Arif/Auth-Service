@@ -1,23 +1,23 @@
 function maskEmail(value) {
-  const [localPart, domain] = value.split("@");
+  const [localPart, domain] = value.split('@');
   if (!domain) {
-    return "***";
+    return '***';
   }
 
-  const visiblePrefix = localPart.slice(0, 1) || "*";
+  const visiblePrefix = localPart.slice(0, 1) || '*';
   return `${visiblePrefix}***@${domain}`;
 }
 
 function maskPhone(value) {
   if (value.length <= 4) {
-    return "****";
+    return '****';
   }
 
-  return `${"*".repeat(Math.max(0, value.length - 4))}${value.slice(-4)}`;
+  return `${'*'.repeat(Math.max(0, value.length - 4))}${value.slice(-4)}`;
 }
 
 function maskTarget(targetType, targetValue) {
-  if (targetType === "email") {
+  if (targetType === 'email') {
     return maskEmail(targetValue);
   }
 

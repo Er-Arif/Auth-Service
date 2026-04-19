@@ -1,4 +1,4 @@
-const { prisma } = require("../../lib/prisma");
+const { prisma } = require('../../lib/prisma');
 
 class IdentityRepository {
   async upsertIdentity({ appId, identityType, identityValue, metadataJson }) {

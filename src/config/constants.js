@@ -1,36 +1,36 @@
 const APP_STATUS = {
-  ACTIVE: "active",
-  INACTIVE: "inactive",
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
 };
 
 const TARGET_TYPES = {
-  EMAIL: "email",
-  PHONE: "phone",
+  EMAIL: 'email',
+  PHONE: 'phone',
 };
 
 const OTP_PURPOSES = {
-  LOGIN: "login",
-  SIGNUP: "signup",
-  VERIFY_IDENTITY: "verify_identity",
-  RESET: "reset",
+  LOGIN: 'login',
+  SIGNUP: 'signup',
+  VERIFY_IDENTITY: 'verify_identity',
+  RESET: 'reset',
 };
 
 const DELIVERY_CHANNELS = {
-  EMAIL: "email",
-  SMS: "sms",
-  MOCK: "mock",
+  EMAIL: 'email',
+  SMS: 'sms',
+  MOCK: 'mock',
 };
 
 const EMAIL_PROVIDERS = {
-  SMTP: "smtp",
-  RESEND: "resend",
-  MOCK: "mock",
+  SMTP: 'smtp',
+  RESEND: 'resend',
+  MOCK: 'mock',
 };
 
 const SMS_PROVIDERS = {
-  MSG91: "msg91",
-  FAST2SMS: "fast2sms",
-  MOCK: "mock",
+  MSG91: 'msg91',
+  FAST2SMS: 'fast2sms',
+  MOCK: 'mock',
 };
 
 const DEFAULT_OTP_POLICY = {

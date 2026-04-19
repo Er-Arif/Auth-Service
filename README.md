@@ -48,6 +48,9 @@ auth-service/
 - JWT access tokens
 - Opaque hashed refresh tokens
 - `node-cron` cleanup worker
+- Dockerized runtime and worker support
+- ESLint + Prettier quality gates
+- GitHub Actions CI pipeline
 
 ## Environment setup
 
@@ -102,7 +105,25 @@ cmd /c npm run openapi:generate
 Smoke tests:
 
 ```powershell
+cmd /c npm run test:smoke
+```
+
+Unit + integration tests:
+
+```powershell
 cmd /c npm test
+```
+
+Lint:
+
+```powershell
+cmd /c npm run lint
+```
+
+Format check:
+
+```powershell
+cmd /c npm run format:check
 ```
 
 ## Seeded demo apps
@@ -124,3 +145,30 @@ The seed creates two apps for local testing:
 - `POST /apps` returns a generated `app_key` in the response as an operational addition so newly created apps can actually authenticate.
 - SMS delivery now supports MSG91 through the provider abstraction. Fill `MSG91_AUTH_KEY` and `MSG91_SMS_SENDER_ID`, then set an app config to `active_channel=sms` and `sms_provider=msg91`.
 - Git history is tracked locally phase by phase; pushing to GitHub still requires a remote to be configured.
+
+## Deployment notes
+
+- Production startup now fails fast if insecure default secrets are left in place.
+- Set `ENABLE_DEV_OTP_LOG=false` in production.
+- Configure `CORS_ORIGIN` with your allowed frontend or backend origins.
+- Set `TRUST_PROXY=true` when deploying behind a reverse proxy or load balancer.
+- Run the API and worker as separate processes.
+
+Docker Compose for local deployment-style testing:
+
+```powershell
+docker compose up --build
+```
+
+Containerized services included:
+
+- `postgres`
+- `mailpit`
+- `auth-service`
+- `worker`
+
+CI entrypoint:
+
+```powershell
+cmd /c npm run test:ci
+```

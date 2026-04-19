@@ -1,4 +1,4 @@
-const auditRepository = require("./audit.repository");
+const auditRepository = require('./audit.repository');
 
 class AuditService {
   async logEvent(data) {

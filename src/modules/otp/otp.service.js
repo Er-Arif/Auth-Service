@@ -1,12 +1,12 @@
-const { AppError } = require("../../utils/errors");
-const { normalizeTarget } = require("../../utils/normalization");
-const { maskTarget } = require("../../utils/masking");
-const { sendOtp: deliverOtp } = require("../../lib/delivery/delivery-manager");
-const otpRepository = require("./otp.repository");
-const otpCoreService = require("./otp-core.service");
-const auditService = require("../audit/audit.service");
-const identityService = require("../identities/identity.service");
-const authService = require("../auth/auth.service");
+const { AppError } = require('../../utils/errors');
+const { normalizeTarget } = require('../../utils/normalization');
+const { maskTarget } = require('../../utils/masking');
+const { sendOtp: deliverOtp } = require('../../lib/delivery/delivery-manager');
+const otpRepository = require('./otp.repository');
+const otpCoreService = require('./otp-core.service');
+const auditService = require('../audit/audit.service');
+const identityService = require('../identities/identity.service');
+const authService = require('../auth/auth.service');
 
 class OtpService {
   async enforceRateLimits({ appContext, targetType, targetValue, ipAddress }) {
@@ -25,11 +25,14 @@ class OtpService {
       }),
     ]);
 
-    if (targetCount >= appContext.config.maxRequestsPerHourPerTarget || ipCount >= appContext.config.maxRequestsPerHourPerIp) {
+    if (
+      targetCount >= appContext.config.maxRequestsPerHourPerTarget ||
+      ipCount >= appContext.config.maxRequestsPerHourPerIp
+    ) {
       throw new AppError({
         statusCode: 429,
-        message: "Too many OTP requests. Please try again later.",
-        errors: [{ code: "OTP_RATE_LIMIT_EXCEEDED" }],
+        message: 'Too many OTP requests. Please try again later.',
+        errors: [{ code: 'OTP_RATE_LIMIT_EXCEEDED' }],
       });
     }
   }
@@ -43,8 +46,8 @@ class OtpService {
     if (availableAt > Date.now()) {
       throw new AppError({
         statusCode: 429,
-        message: "Please wait before requesting another OTP",
-        errors: [{ field: "target_value", code: "OTP_COOLDOWN_ACTIVE" }],
+        message: 'Please wait before requesting another OTP',
+        errors: [{ field: 'target_value', code: 'OTP_COOLDOWN_ACTIVE' }],
       });
     }
   }
@@ -119,13 +122,13 @@ class OtpService {
 
     await auditService.logEvent({
       appId: appContext.app.appId,
-      eventType: "otp.send",
+      eventType: 'otp.send',
       targetType: body.target_type,
       targetValue,
       ipAddress,
       deviceId: body.device_id,
-      status: "success",
-      message: "OTP sent successfully",
+      status: 'success',
+      message: 'OTP sent successfully',
       metadataJson: body.metadata || null,
     });
 
@@ -157,8 +160,8 @@ class OtpService {
     if (!latestOtp || otpCoreService.isExpired(latestOtp.expiresAt)) {
       throw new AppError({
         statusCode: 404,
-        message: "OTP not found",
-        errors: [{ code: "OTP_NOT_FOUND" }],
+        message: 'OTP not found',
+        errors: [{ code: 'OTP_NOT_FOUND' }],
       });
     }
 
@@ -167,8 +170,8 @@ class OtpService {
     if (latestOtp.resendCount >= appContext.config.maxResendCount) {
       throw new AppError({
         statusCode: 429,
-        message: "Maximum resend attempts reached",
-        errors: [{ code: "OTP_RESEND_LIMIT_EXCEEDED" }],
+        message: 'Maximum resend attempts reached',
+        errors: [{ code: 'OTP_RESEND_LIMIT_EXCEEDED' }],
       });
     }
 
@@ -205,13 +208,13 @@ class OtpService {
 
     await auditService.logEvent({
       appId: appContext.app.appId,
-      eventType: "otp.resend",
+      eventType: 'otp.resend',
       targetType: body.target_type,
       targetValue,
       ipAddress,
       deviceId: body.device_id,
-      status: "success",
-      message: "OTP resent successfully",
+      status: 'success',
+      message: 'OTP resent successfully',
     });
 
     return {
@@ -231,24 +234,24 @@ class OtpService {
     if (!latestOtp) {
       throw new AppError({
         statusCode: 404,
-        message: "OTP not found",
-        errors: [{ code: "OTP_NOT_FOUND" }],
+        message: 'OTP not found',
+        errors: [{ code: 'OTP_NOT_FOUND' }],
       });
     }
 
     if (otpCoreService.isExpired(latestOtp.expiresAt)) {
       throw new AppError({
         statusCode: 422,
-        message: "OTP has expired",
-        errors: [{ field: "otp", code: "OTP_EXPIRED" }],
+        message: 'OTP has expired',
+        errors: [{ field: 'otp', code: 'OTP_EXPIRED' }],
       });
     }
 
     if (latestOtp.attempts >= latestOtp.maxAttempts) {
       throw new AppError({
         statusCode: 422,
-        message: "Maximum OTP attempts exceeded",
-        errors: [{ field: "otp", code: "OTP_MAX_ATTEMPTS_EXCEEDED" }],
+        message: 'Maximum OTP attempts exceeded',
+        errors: [{ field: 'otp', code: 'OTP_MAX_ATTEMPTS_EXCEEDED' }],
       });
     }
 
@@ -258,27 +261,27 @@ class OtpService {
     if (!isValid) {
       await auditService.logEvent({
         appId: appContext.app.appId,
-        eventType: "otp.verify",
+        eventType: 'otp.verify',
         targetType: body.target_type,
         targetValue,
         ipAddress,
         deviceId: body.device_id,
-        status: "failed",
-        message: "Invalid OTP",
+        status: 'failed',
+        message: 'Invalid OTP',
       });
 
       if (updatedOtp.attempts >= updatedOtp.maxAttempts) {
         throw new AppError({
           statusCode: 422,
-          message: "Maximum OTP attempts exceeded",
-          errors: [{ field: "otp", code: "OTP_MAX_ATTEMPTS_EXCEEDED" }],
+          message: 'Maximum OTP attempts exceeded',
+          errors: [{ field: 'otp', code: 'OTP_MAX_ATTEMPTS_EXCEEDED' }],
         });
       }
 
       throw new AppError({
         statusCode: 422,
-        message: "Invalid OTP",
-        errors: [{ field: "otp", code: "OTP_INVALID" }],
+        message: 'Invalid OTP',
+        errors: [{ field: 'otp', code: 'OTP_INVALID' }],
       });
     }
 
@@ -300,13 +303,13 @@ class OtpService {
 
     await auditService.logEvent({
       appId: appContext.app.appId,
-      eventType: "otp.verify",
+      eventType: 'otp.verify',
       targetType: body.target_type,
       targetValue,
       ipAddress,
       deviceId: body.device_id,
-      status: "success",
-      message: "OTP verified successfully",
+      status: 'success',
+      message: 'OTP verified successfully',
     });
 
     return {

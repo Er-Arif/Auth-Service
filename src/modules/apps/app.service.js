@@ -1,8 +1,13 @@
-const crypto = require("crypto");
-const { env } = require("../../config/env");
-const { AppError } = require("../../utils/errors");
-const { DEFAULT_OTP_POLICY, TARGET_TYPES, DELIVERY_CHANNELS, EMAIL_PROVIDERS, SMS_PROVIDERS } = require("../../config/constants");
-const appRepository = require("./app.repository");
+const crypto = require('crypto');
+const { env } = require('../../config/env');
+const { AppError } = require('../../utils/errors');
+const {
+  DEFAULT_OTP_POLICY,
+  TARGET_TYPES,
+  DELIVERY_CHANNELS,
+  SMS_PROVIDERS,
+} = require('../../config/constants');
+const appRepository = require('./app.repository');
 
 function mapAppWithConfig(app) {
   return {
@@ -39,9 +44,12 @@ class AppService {
       maxRequestsPerHourPerTarget: DEFAULT_OTP_POLICY.maxRequestsPerHourPerTarget,
       maxRequestsPerHourPerIp: DEFAULT_OTP_POLICY.maxRequestsPerHourPerIp,
       maxResendCount: DEFAULT_OTP_POLICY.maxResendCount,
-      activeChannel: DELIVERY_CHANNELS.MOCK,
-      emailProvider: EMAIL_PROVIDERS.SMTP,
-      smsProvider: SMS_PROVIDERS.MOCK,
+      activeChannel: env.DEFAULT_DELIVERY_CHANNEL,
+      emailProvider: env.DEFAULT_EMAIL_PROVIDER,
+      smsProvider:
+        env.DEFAULT_DELIVERY_CHANNEL === DELIVERY_CHANNELS.SMS
+          ? SMS_PROVIDERS.MSG91
+          : SMS_PROVIDERS.MOCK,
       accessTokenTtlMinutes: DEFAULT_OTP_POLICY.accessTokenTtlMinutes,
       refreshTokenTtlDays: DEFAULT_OTP_POLICY.refreshTokenTtlDays,
     };
@@ -52,8 +60,8 @@ class AppService {
     if (!app) {
       throw new AppError({
         statusCode: 401,
-        message: "Invalid application credentials",
-        errors: [{ code: "APP_AUTH_INVALID" }],
+        message: 'Invalid application credentials',
+        errors: [{ code: 'APP_AUTH_INVALID' }],
       });
     }
 
@@ -61,24 +69,24 @@ class AppService {
     if (!isValidKey) {
       throw new AppError({
         statusCode: 401,
-        message: "Invalid application credentials",
-        errors: [{ code: "APP_AUTH_INVALID" }],
+        message: 'Invalid application credentials',
+        errors: [{ code: 'APP_AUTH_INVALID' }],
       });
     }
 
-    if (app.status !== "active") {
+    if (app.status !== 'active') {
       throw new AppError({
         statusCode: 403,
-        message: "Application is inactive",
-        errors: [{ code: "APP_INACTIVE" }],
+        message: 'Application is inactive',
+        errors: [{ code: 'APP_INACTIVE' }],
       });
     }
 
     if (!app.config) {
       throw new AppError({
         statusCode: 403,
-        message: "Application configuration missing",
-        errors: [{ code: "APP_CONFIG_MISSING" }],
+        message: 'Application configuration missing',
+        errors: [{ code: 'APP_CONFIG_MISSING' }],
       });
     }
 
@@ -86,7 +94,16 @@ class AppService {
   }
 
   async createApp({ appId, name, status, bcrypt }) {
-    const rawAppKey = crypto.randomBytes(24).toString("hex");
+    const existingApp = await appRepository.findByAppId(appId);
+    if (existingApp) {
+      throw new AppError({
+        statusCode: 409,
+        message: 'Application already exists',
+        errors: [{ code: 'APP_ALREADY_EXISTS' }],
+      });
+    }
+
+    const rawAppKey = crypto.randomBytes(24).toString('hex');
     const appKeyHash = await bcrypt.hash(rawAppKey, env.APP_KEY_SALT_ROUNDS);
     const app = await appRepository.createApp({
       appId,
@@ -110,8 +127,8 @@ class AppService {
     if (!app) {
       throw new AppError({
         statusCode: 404,
-        message: "Application not found",
-        errors: [{ code: "APP_NOT_FOUND" }],
+        message: 'Application not found',
+        errors: [{ code: 'APP_NOT_FOUND' }],
       });
     }
 
@@ -119,6 +136,7 @@ class AppService {
   }
 
   async updateApp(appId, data) {
+    await this.getApp(appId);
     const app = await appRepository.updateApp(appId, {
       name: data.name,
       status: data.status,
@@ -128,6 +146,7 @@ class AppService {
   }
 
   async updateConfig(appId, data) {
+    await this.getApp(appId);
     await appRepository.updateConfig(appId, {
       defaultTargetType: data.default_target_type,
       otpExpiryMinutes: data.otp_expiry_minutes,

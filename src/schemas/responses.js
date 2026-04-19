@@ -1,4 +1,4 @@
-const { z, successEnvelopeSchema, errorEnvelopeSchema } = require("./common");
+const { z, successEnvelopeSchema, errorEnvelopeSchema } = require('./common');
 
 const emptyDataSchema = z.object({});
 

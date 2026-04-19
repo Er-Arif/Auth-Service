@@ -1,5 +1,5 @@
-const { logger } = require("../../logger");
-const { env, isProduction } = require("../../../config/env");
+const { logger } = require('../../logger');
+const { env, isProduction } = require('../../../config/env');
 
 const mockProvider = {
   async sendOtp(payload) {
@@ -11,13 +11,13 @@ const mockProvider = {
           targetValue: payload.targetValue,
           otp: payload.otp,
         },
-        "Mock OTP delivery",
+        'Mock OTP delivery',
       );
     }
 
     return {
-      channel: "mock",
-      provider: "mock",
+      channel: 'mock',
+      provider: 'mock',
       accepted: true,
     };
   },

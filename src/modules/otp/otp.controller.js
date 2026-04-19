@@ -1,5 +1,5 @@
-const otpService = require("./otp.service");
-const { successResponse } = require("../../utils/response");
+const otpService = require('./otp.service');
+const { successResponse } = require('../../utils/response');
 
 class OtpController {
   async sendOtp(req, res) {
@@ -11,7 +11,7 @@ class OtpController {
 
     res.status(200).json(
       successResponse({
-        message: "OTP sent successfully",
+        message: 'OTP sent successfully',
         data: result,
       }),
     );
@@ -26,7 +26,7 @@ class OtpController {
 
     res.status(200).json(
       successResponse({
-        message: "OTP verified successfully",
+        message: 'OTP verified successfully',
         data: result,
       }),
     );
@@ -41,7 +41,7 @@ class OtpController {
 
     res.status(200).json(
       successResponse({
-        message: "OTP resent successfully",
+        message: 'OTP resent successfully',
         data: result,
       }),
     );

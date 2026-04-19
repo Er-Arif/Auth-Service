@@ -1,8 +1,8 @@
-const express = require("express");
-const { asyncHandler } = require("../utils/async-handler");
-const { registerRoute } = require("../openapi/registry");
+const express = require('express');
+const { asyncHandler } = require('../utils/async-handler');
+const { registerRoute } = require('../openapi/registry');
 
-function createRouteModule({ basePath = "", routes = [] }) {
+function createRouteModule({ basePath = '', routes = [] }) {
   const router = express.Router();
 
   routes.forEach((route) => {

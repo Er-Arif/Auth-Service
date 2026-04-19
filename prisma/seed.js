@@ -1,7 +1,14 @@
-require("dotenv").config();
-const bcrypt = require("bcryptjs");
-const { PrismaClient } = require("@prisma/client");
-const { DEFAULT_OTP_POLICY, DELIVERY_CHANNELS, EMAIL_PROVIDERS, SMS_PROVIDERS, TARGET_TYPES, APP_STATUS } = require("../src/config/constants");
+require('dotenv').config();
+const bcrypt = require('bcryptjs');
+const { PrismaClient } = require('@prisma/client');
+const {
+  DEFAULT_OTP_POLICY,
+  DELIVERY_CHANNELS,
+  EMAIL_PROVIDERS,
+  SMS_PROVIDERS,
+  TARGET_TYPES,
+  APP_STATUS,
+} = require('../src/config/constants');
 
 const prisma = new PrismaClient();
 
@@ -59,16 +66,16 @@ async function upsertApp({ appId, name, rawAppKey, status }) {
 
 async function main() {
   await upsertApp({
-    appId: "ride_app",
-    name: "Ride Booking App",
-    rawAppKey: "ride_app_secret_123",
+    appId: 'ride_app',
+    name: 'Ride Booking App',
+    rawAppKey: 'ride_app_secret_123',
     status: APP_STATUS.ACTIVE,
   });
 
   await upsertApp({
-    appId: "social_app",
-    name: "Social App",
-    rawAppKey: "social_app_secret_123",
+    appId: 'social_app',
+    name: 'Social App',
+    rawAppKey: 'social_app_secret_123',
     status: APP_STATUS.INACTIVE,
   });
 }

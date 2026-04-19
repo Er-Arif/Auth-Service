@@ -60,6 +60,8 @@ This keeps request parsing, orchestration, persistence, and domain logic separat
 - Records auth and security events in `audit_logs`
 - Provides `GET /health`, `GET /metrics`, and `GET /audit-logs`
 - Includes cron-based cleanup worker scaffold outside the API bootstrap path
+- Supports graceful shutdown for both API and worker processes
+- Supports deployment-time CORS and proxy configuration through environment variables
 
 ## OpenAPI readiness
 
@@ -71,7 +73,7 @@ The current implementation does not expose Swagger UI, but it is structured so O
 
 ## Current deferred items
 
-- Real SMS provider integration
 - richer metrics/observability
 - dashboard and billing for SaaS mode
 - stronger internal admin auth beyond a static admin key
+- dedicated SDKs for downstream apps

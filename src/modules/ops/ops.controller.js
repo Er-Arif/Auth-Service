@@ -1,17 +1,17 @@
-const { prisma } = require("../../lib/prisma");
-const appService = require("../apps/app.service");
-const identityService = require("../identities/identity.service");
-const otpService = require("../otp/otp.service");
-const authService = require("../auth/auth.service");
-const { successResponse } = require("../../utils/response");
+const { prisma } = require('../../lib/prisma');
+const appService = require('../apps/app.service');
+const identityService = require('../identities/identity.service');
+const otpService = require('../otp/otp.service');
+const authService = require('../auth/auth.service');
+const { successResponse } = require('../../utils/response');
 
 class OpsController {
   async health(req, res) {
     await prisma.$queryRaw`SELECT 1`;
     res.status(200).json(
       successResponse({
-        message: "Service healthy",
-        data: { status: "ok" },
+        message: 'Service healthy',
+        data: { status: 'ok' },
       }),
     );
   }
@@ -26,7 +26,7 @@ class OpsController {
 
     res.status(200).json(
       successResponse({
-        message: "Metrics fetched successfully",
+        message: 'Metrics fetched successfully',
         data: {
           apps,
           identities,

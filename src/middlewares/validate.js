@@ -1,4 +1,4 @@
-const { AppError } = require("../utils/errors");
+const { AppError } = require('../utils/errors');
 
 function validate({ body, params, query, headers }) {
   return (req, res, next) => {
@@ -34,8 +34,8 @@ function requireValidatedBody(req) {
   if (!req.validated?.body) {
     throw new AppError({
       statusCode: 500,
-      message: "Validated body missing",
-      errors: [{ code: "VALIDATED_BODY_MISSING" }],
+      message: 'Validated body missing',
+      errors: [{ code: 'VALIDATED_BODY_MISSING' }],
     });
   }
 

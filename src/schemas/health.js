@@ -1,8 +1,8 @@
-const { z, successEnvelopeSchema } = require("./common");
+const { z, successEnvelopeSchema } = require('./common');
 
 const healthResponseSchema = successEnvelopeSchema(
   z.object({
-    status: z.literal("ok"),
+    status: z.literal('ok'),
   }),
 );
 

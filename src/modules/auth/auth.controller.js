@@ -1,5 +1,5 @@
-const authService = require("./auth.service");
-const { successResponse } = require("../../utils/response");
+const authService = require('./auth.service');
+const { successResponse } = require('../../utils/response');
 
 class AuthController {
   async refresh(req, res) {
@@ -12,7 +12,7 @@ class AuthController {
 
     res.status(200).json(
       successResponse({
-        message: "Token refreshed successfully",
+        message: 'Token refreshed successfully',
         data: result,
       }),
     );
@@ -28,7 +28,7 @@ class AuthController {
 
     res.status(200).json(
       successResponse({
-        message: "Logged out successfully",
+        message: 'Logged out successfully',
         data: {},
       }),
     );
@@ -44,7 +44,7 @@ class AuthController {
 
     res.status(200).json(
       successResponse({
-        message: "Logged out from all devices successfully",
+        message: 'Logged out from all devices successfully',
         data: {},
       }),
     );

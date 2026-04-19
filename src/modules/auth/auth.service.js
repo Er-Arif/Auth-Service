@@ -1,10 +1,10 @@
-const jwt = require("jsonwebtoken");
-const { env } = require("../../config/env");
-const { addDays } = require("../../utils/time");
-const { AppError } = require("../../utils/errors");
-const { hashToken, generateOpaqueToken } = require("../../utils/crypto");
-const authRepository = require("./auth.repository");
-const auditService = require("../audit/audit.service");
+const jwt = require('jsonwebtoken');
+const { env } = require('../../config/env');
+const { addDays } = require('../../utils/time');
+const { AppError } = require('../../utils/errors');
+const { hashToken, generateOpaqueToken } = require('../../utils/crypto');
+const authRepository = require('./auth.repository');
+const auditService = require('../audit/audit.service');
 
 class AuthService {
   signAccessToken({ identity, appConfig }) {
@@ -44,7 +44,7 @@ class AuthService {
     return {
       access_token: accessToken,
       refresh_token: refreshToken,
-      token_type: "Bearer",
+      token_type: 'Bearer',
       expires_in: expiresIn,
     };
   }
@@ -60,8 +60,8 @@ class AuthService {
     ) {
       throw new AppError({
         statusCode: 401,
-        message: "Invalid or expired refresh token",
-        errors: [{ code: "REFRESH_TOKEN_INVALID" }],
+        message: 'Invalid or expired refresh token',
+        errors: [{ code: 'REFRESH_TOKEN_INVALID' }],
       });
     }
 
@@ -76,13 +76,13 @@ class AuthService {
 
     await auditService.logEvent({
       appId: appContext.app.appId,
-      eventType: "auth.refresh",
+      eventType: 'auth.refresh',
       targetType: tokenRecord.identity.identityType,
       targetValue: tokenRecord.identity.identityValue,
       ipAddress,
       deviceId,
-      status: "success",
-      message: "Token refreshed successfully",
+      status: 'success',
+      message: 'Token refreshed successfully',
     });
 
     return tokens;
@@ -94,8 +94,8 @@ class AuthService {
     if (!tokenRecord || tokenRecord.appId !== appContext.app.appId) {
       throw new AppError({
         statusCode: 401,
-        message: "Invalid or expired refresh token",
-        errors: [{ code: "REFRESH_TOKEN_INVALID" }],
+        message: 'Invalid or expired refresh token',
+        errors: [{ code: 'REFRESH_TOKEN_INVALID' }],
       });
     }
 
@@ -105,13 +105,13 @@ class AuthService {
 
     await auditService.logEvent({
       appId: appContext.app.appId,
-      eventType: "auth.logout",
+      eventType: 'auth.logout',
       targetType: tokenRecord.identity.identityType,
       targetValue: tokenRecord.identity.identityValue,
       ipAddress,
       deviceId,
-      status: "success",
-      message: "Logged out successfully",
+      status: 'success',
+      message: 'Logged out successfully',
     });
   }
 
@@ -119,8 +119,8 @@ class AuthService {
     if (auth.identity_id !== identityId) {
       throw new AppError({
         statusCode: 403,
-        message: "Forbidden",
-        errors: [{ code: "ACCESS_TOKEN_INVALID" }],
+        message: 'Forbidden',
+        errors: [{ code: 'ACCESS_TOKEN_INVALID' }],
       });
     }
 
@@ -128,13 +128,13 @@ class AuthService {
 
     await auditService.logEvent({
       appId: appContext.app.appId,
-      eventType: "auth.logout_all",
+      eventType: 'auth.logout_all',
       targetType: auth.identity_type,
       targetValue: auth.identity_value,
       ipAddress,
       deviceId: null,
-      status: "success",
-      message: "Logged out from all devices successfully",
+      status: 'success',
+      message: 'Logged out from all devices successfully',
     });
   }
 

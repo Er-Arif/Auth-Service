@@ -1,9 +1,11 @@
 # 🚀 OTP Auth Service Development Roadmap
+
 ## Build Your Own Reusable Authentication Service (Phase-wise Plan)
 
 This roadmap is designed so an AI agent (or you) can build your **OTP Authentication Service** step-by-step in a structured, production-ready way.
 
 Goal:
+
 - Build once
 - Reuse across all apps
 - Later convert into paid API service
@@ -13,13 +15,16 @@ Goal:
 # 🧭 PHASE 0: PROJECT SETUP (FOUNDATION)
 
 ## Objective
+
 Set up clean architecture and environment.
 
 ## Tasks
+
 - Create project: `auth-service`
 - Setup backend:
   - Node.js + Express (recommended)
 - Setup structure:
+
 ```
 /auth-service
   /src
@@ -37,6 +42,7 @@ Set up clean architecture and environment.
   - validation (Joi/Zod)
 
 ## Output
+
 - Running backend server
 - Clean folder structure
 
@@ -45,17 +51,20 @@ Set up clean architecture and environment.
 # 🧱 PHASE 1: DATABASE DESIGN
 
 ## Objective
+
 Design core reusable schema
 
 ## Tables
 
 ### apps
+
 - id
 - name
 - api_key
 - is_active
 
 ### otp_codes
+
 - id
 - app_id
 - target_type
@@ -67,6 +76,7 @@ Design core reusable schema
 - is_used
 
 ### identities
+
 - id
 - app_id
 - target_type
@@ -74,6 +84,7 @@ Design core reusable schema
 - is_verified
 
 ### refresh_tokens
+
 - id
 - app_id
 - identity_id
@@ -82,6 +93,7 @@ Design core reusable schema
 - is_revoked
 
 ### audit_logs
+
 - id
 - app_id
 - event
@@ -90,6 +102,7 @@ Design core reusable schema
 - ip
 
 ## Output
+
 - DB schema ready
 - migrations created
 
@@ -98,9 +111,11 @@ Design core reusable schema
 # 🔐 PHASE 2: OTP CORE ENGINE
 
 ## Objective
+
 Build the heart of the system
 
 ## Features
+
 - generate OTP
 - hash OTP
 - store OTP
@@ -109,6 +124,7 @@ Build the heart of the system
 - resend cooldown
 
 ## Functions
+
 ```
 generateOtp()
 hashOtp()
@@ -118,6 +134,7 @@ incrementAttempts()
 ```
 
 ## Output
+
 - Fully working OTP logic (no delivery yet)
 
 ---
@@ -125,9 +142,11 @@ incrementAttempts()
 # 📡 PHASE 3: DELIVERY SYSTEM (PLUGGABLE)
 
 ## Objective
+
 Send OTP via email now, SMS later
 
 ## Architecture
+
 ```
 /otp-delivery
   /providers
@@ -137,15 +156,18 @@ Send OTP via email now, SMS later
 ```
 
 ## Interface
+
 ```
 sendOtp({ targetType, targetValue, message })
 ```
 
 ## Phase implementation
+
 - Implement EMAIL provider (Resend or SMTP)
 - Implement MOCK provider
 
 ## Output
+
 - OTP sent via email
 - Easy to switch provider later
 
@@ -154,27 +176,34 @@ sendOtp({ targetType, targetValue, message })
 # 🔑 PHASE 4: AUTH API IMPLEMENTATION
 
 ## Objective
+
 Expose OTP system via APIs
 
 ## APIs
 
 ### POST /otp/send
+
 - generate + send OTP
 
 ### POST /otp/verify
+
 - verify OTP
 
 ### POST /auth/refresh
+
 - refresh token
 
 ### POST /auth/logout
+
 - revoke token
 
 ## Token system
+
 - JWT access token
 - refresh token
 
 ## Output
+
 - Complete login flow working
 
 ---
@@ -182,13 +211,16 @@ Expose OTP system via APIs
 # 👥 PHASE 5: MULTI-APP SUPPORT
 
 ## Objective
+
 Make system reusable across apps
 
 ## Add
+
 - `app_id` in every request
 - app-specific configs
 
 ## Example request
+
 ```
 {
   "app_id": "ride_app",
@@ -197,6 +229,7 @@ Make system reusable across apps
 ```
 
 ## Output
+
 - Multiple apps can use same auth service
 
 ---
@@ -204,9 +237,11 @@ Make system reusable across apps
 # 🛡️ PHASE 6: SECURITY LAYER
 
 ## Objective
+
 Make system production-safe
 
 ## Implement
+
 - rate limiting (IP + target)
 - resend cooldown
 - max attempts
@@ -215,6 +250,7 @@ Make system production-safe
 - audit logs
 
 ## Output
+
 - Secure OTP system
 
 ---
@@ -222,13 +258,16 @@ Make system production-safe
 # 🗂️ PHASE 7: IDENTITY MANAGEMENT
 
 ## Objective
+
 Separate identity from app users
 
 ## Logic
+
 - OTP verifies identity
 - App decides user creation
 
 ## Output
+
 - Generic identity system usable everywhere
 
 ---
@@ -236,16 +275,20 @@ Separate identity from app users
 # 🔌 PHASE 8: INTEGRATION WITH YOUR APPS
 
 ## Objective
+
 Use service in real apps
 
 ## Steps
+
 - integrate with ride app
 - integrate with social app
 
 ## Flow
+
 App → Auth Service → Response → App logic
 
 ## Output
+
 - Real-world tested system
 
 ---
@@ -253,14 +296,17 @@ App → Auth Service → Response → App logic
 # 📊 PHASE 9: LOGGING & MONITORING
 
 ## Objective
+
 Track usage and debug
 
 ## Add
+
 - audit logs
 - request logs
 - OTP success/failure logs
 
 ## Output
+
 - Debuggable system
 
 ---
@@ -268,14 +314,17 @@ Track usage and debug
 # 💰 PHASE 10: PREPARE FOR SAAS (FUTURE)
 
 ## Objective
+
 Make it sellable later
 
 ## Add
+
 - API key system
 - usage tracking
 - rate limits per app
 
 ## Future features
+
 - dashboard
 - billing
 - analytics
@@ -312,6 +361,7 @@ Follow this exact order:
 # 🎯 FINAL RESULT
 
 You will have:
+
 - reusable OTP auth system
 - API-based architecture
 - multi-app support
@@ -323,4 +373,3 @@ You will have:
 # 🔥 ONE LINE SUMMARY
 
 Build it like a **product**, not a feature.
-

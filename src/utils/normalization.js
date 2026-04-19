@@ -1,11 +1,11 @@
-const { TARGET_TYPES } = require("../config/constants");
+const { TARGET_TYPES } = require('../config/constants');
 
 function normalizeEmail(value) {
   return value.trim().toLowerCase();
 }
 
 function normalizePhone(value) {
-  return value.replace(/\s+/g, "").replace(/-/g, "");
+  return value.replace(/\s+/g, '').replace(/-/g, '');
 }
 
 function normalizeTarget(targetType, targetValue) {

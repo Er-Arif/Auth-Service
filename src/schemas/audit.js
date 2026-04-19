@@ -1,4 +1,4 @@
-const { z, successEnvelopeSchema } = require("./common");
+const { z, successEnvelopeSchema } = require('./common');
 
 const auditLogQuerySchema = z.object({
   app_id: z.string().trim().min(1).optional(),

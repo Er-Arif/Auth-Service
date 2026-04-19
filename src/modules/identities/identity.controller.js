@@ -1,13 +1,13 @@
-const otpService = require("../otp/otp.service");
-const identityService = require("./identity.service");
-const { successResponse } = require("../../utils/response");
+const otpService = require('../otp/otp.service');
+const identityService = require('./identity.service');
+const { successResponse } = require('../../utils/response');
 
 class IdentityController {
   async getMe(req, res) {
     const identity = await identityService.getCurrentIdentity(req.auth);
     res.status(200).json(
       successResponse({
-        message: "Identity fetched successfully",
+        message: 'Identity fetched successfully',
         data: identity,
       }),
     );
@@ -20,7 +20,7 @@ class IdentityController {
         ...req.validated.body,
         device_id: undefined,
         metadata: {
-          source: "verify_contact",
+          source: 'verify_contact',
           identity_id: req.auth.identity_id,
         },
       },
@@ -29,7 +29,7 @@ class IdentityController {
 
     res.status(200).json(
       successResponse({
-        message: "OTP sent successfully",
+        message: 'OTP sent successfully',
         data: result,
       }),
     );
@@ -43,7 +43,7 @@ class IdentityController {
 
     res.status(200).json(
       successResponse({
-        message: "Identity fetched successfully",
+        message: 'Identity fetched successfully',
         data: identity,
       }),
     );

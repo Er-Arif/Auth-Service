@@ -1,8 +1,8 @@
-const { AppError } = require("../../utils/errors");
-const mockProvider = require("./providers/mock.provider");
-const smtpProvider = require("./providers/smtp.provider");
-const resendProvider = require("./providers/resend.provider");
-const smsProvider = require("./providers/sms.provider");
+const { AppError } = require('../../utils/errors');
+const mockProvider = require('./providers/mock.provider');
+const smtpProvider = require('./providers/smtp.provider');
+const resendProvider = require('./providers/resend.provider');
+const smsProvider = require('./providers/sms.provider');
 
 const emailProviders = {
   smtp: smtpProvider,
@@ -17,16 +17,16 @@ const smsProviders = {
 };
 
 async function sendOtp({ appConfig, payload }) {
-  if (appConfig.activeChannel === "mock") {
+  if (appConfig.activeChannel === 'mock') {
     return mockProvider.sendOtp(payload);
   }
 
-  if (appConfig.activeChannel === "email") {
-    if (payload.targetType !== "email") {
+  if (appConfig.activeChannel === 'email') {
+    if (payload.targetType !== 'email') {
       throw new AppError({
         statusCode: 503,
-        message: "Delivery provider unavailable",
-        errors: [{ code: "DELIVERY_PROVIDER_UNAVAILABLE" }],
+        message: 'Delivery provider unavailable',
+        errors: [{ code: 'DELIVERY_PROVIDER_UNAVAILABLE' }],
       });
     }
 
@@ -34,20 +34,20 @@ async function sendOtp({ appConfig, payload }) {
     if (!provider) {
       throw new AppError({
         statusCode: 503,
-        message: "Delivery provider unavailable",
-        errors: [{ code: "DELIVERY_PROVIDER_UNAVAILABLE" }],
+        message: 'Delivery provider unavailable',
+        errors: [{ code: 'DELIVERY_PROVIDER_UNAVAILABLE' }],
       });
     }
 
     return provider.sendOtp(payload);
   }
 
-  if (appConfig.activeChannel === "sms") {
-    if (payload.targetType !== "phone") {
+  if (appConfig.activeChannel === 'sms') {
+    if (payload.targetType !== 'phone') {
       throw new AppError({
         statusCode: 503,
-        message: "Delivery provider unavailable",
-        errors: [{ code: "DELIVERY_PROVIDER_UNAVAILABLE" }],
+        message: 'Delivery provider unavailable',
+        errors: [{ code: 'DELIVERY_PROVIDER_UNAVAILABLE' }],
       });
     }
 
@@ -55,8 +55,8 @@ async function sendOtp({ appConfig, payload }) {
     if (!provider) {
       throw new AppError({
         statusCode: 503,
-        message: "Delivery provider unavailable",
-        errors: [{ code: "DELIVERY_PROVIDER_UNAVAILABLE" }],
+        message: 'Delivery provider unavailable',
+        errors: [{ code: 'DELIVERY_PROVIDER_UNAVAILABLE' }],
       });
     }
 
@@ -65,8 +65,8 @@ async function sendOtp({ appConfig, payload }) {
 
   throw new AppError({
     statusCode: 503,
-    message: "Delivery provider unavailable",
-    errors: [{ code: "DELIVERY_PROVIDER_UNAVAILABLE" }],
+    message: 'Delivery provider unavailable',
+    errors: [{ code: 'DELIVERY_PROVIDER_UNAVAILABLE' }],
   });
 }
 

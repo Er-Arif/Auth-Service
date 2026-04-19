@@ -1,11 +1,11 @@
-const { extendZodWithOpenApi } = require("@asteasolutions/zod-to-openapi");
-const { z } = require("zod");
+const { extendZodWithOpenApi } = require('@asteasolutions/zod-to-openapi');
+const { z } = require('zod');
 const {
   OTP_PURPOSES,
   TARGET_TYPES,
   APP_STATUS,
   DELIVERY_CHANNELS,
-} = require("../config/constants");
+} = require('../config/constants');
 
 extendZodWithOpenApi(z);
 

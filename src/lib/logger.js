@@ -1,35 +1,35 @@
-const pino = require("pino");
-const { env, isDevelopment } = require("../config/env");
+const pino = require('pino');
+const { env, isDevelopment } = require('../config/env');
 
 const redactPaths = [
-  "req.headers.authorization",
-  "req.headers.x-app-key",
-  "req.headers.x-internal-admin-key",
-  "req.body.otp",
-  "req.body.refresh_token",
-  "res.body.data.refresh_token",
-  "otp",
-  "appKey",
-  "refreshToken",
+  'req.headers.authorization',
+  'req.headers.x-app-key',
+  'req.headers.x-internal-admin-key',
+  'req.body.otp',
+  'req.body.refresh_token',
+  'res.body.data.refresh_token',
+  'otp',
+  'appKey',
+  'refreshToken',
 ];
 
 const logger = pino({
-  level: isDevelopment ? "debug" : "info",
+  level: isDevelopment ? 'debug' : 'info',
   redact: {
     paths: redactPaths,
-    censor: "[REDACTED]",
+    censor: '[REDACTED]',
   },
   transport: isDevelopment
     ? {
-        target: "pino-pretty",
+        target: 'pino-pretty',
         options: {
           colorize: true,
-          ignore: "pid,hostname",
+          ignore: 'pid,hostname',
         },
       }
     : undefined,
   base: {
-    service: "auth-service",
+    service: 'auth-service',
     env: env.NODE_ENV,
   },
 });
