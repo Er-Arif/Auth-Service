@@ -5,6 +5,12 @@ class OtpRepository {
     return prisma.otpCode.create({ data });
   }
 
+  async deleteOtp(id) {
+    return prisma.otpCode.delete({
+      where: { id },
+    });
+  }
+
   async findLatestOtp({ appId, targetType, targetValue, purpose }) {
     return prisma.otpCode.findFirst({
       where: {

@@ -4,6 +4,7 @@ const { env, isDevelopment } = require("../config/env");
 const redactPaths = [
   "req.headers.authorization",
   "req.headers.x-app-key",
+  "req.headers.x-internal-admin-key",
   "req.body.otp",
   "req.body.refresh_token",
   "res.body.data.refresh_token",

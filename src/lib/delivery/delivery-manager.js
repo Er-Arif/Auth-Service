@@ -43,6 +43,14 @@ async function sendOtp({ appConfig, payload }) {
   }
 
   if (appConfig.activeChannel === "sms") {
+    if (payload.targetType !== "phone") {
+      throw new AppError({
+        statusCode: 503,
+        message: "Delivery provider unavailable",
+        errors: [{ code: "DELIVERY_PROVIDER_UNAVAILABLE" }],
+      });
+    }
+
     const provider = smsProviders[appConfig.smsProvider];
     if (!provider) {
       throw new AppError({

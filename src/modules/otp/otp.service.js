@@ -85,7 +85,7 @@ class OtpService {
     }
 
     const otp = otpCoreService.generateOtp();
-    await otpRepository.createOtp({
+    const otpRecord = await otpRepository.createOtp({
       appId: appContext.app.appId,
       targetType: body.target_type,
       targetValue,
@@ -98,17 +98,24 @@ class OtpService {
       deviceId: body.device_id,
     });
 
-    const deliveryResult = await deliverOtp({
-      appConfig: appContext.config,
-      payload: this.buildDeliveryPayload({
-        appId: appContext.app.appId,
-        targetType: body.target_type,
-        targetValue,
-        otp,
-        purpose: body.purpose,
-        expiryMinutes: appContext.config.otpExpiryMinutes,
-      }),
-    });
+    let deliveryResult;
+
+    try {
+      deliveryResult = await deliverOtp({
+        appConfig: appContext.config,
+        payload: this.buildDeliveryPayload({
+          appId: appContext.app.appId,
+          targetType: body.target_type,
+          targetValue,
+          otp,
+          purpose: body.purpose,
+          expiryMinutes: appContext.config.otpExpiryMinutes,
+        }),
+      });
+    } catch (error) {
+      await otpRepository.deleteOtp(otpRecord.id).catch(() => null);
+      throw error;
+    }
 
     await auditService.logEvent({
       appId: appContext.app.appId,
@@ -140,6 +147,13 @@ class OtpService {
       purpose: body.purpose,
     });
 
+    await this.enforceRateLimits({
+      appContext,
+      targetType: body.target_type,
+      targetValue,
+      ipAddress,
+    });
+
     if (!latestOtp || otpCoreService.isExpired(latestOtp.expiresAt)) {
       throw new AppError({
         statusCode: 404,
@@ -159,7 +173,7 @@ class OtpService {
     }
 
     const otp = otpCoreService.generateOtp();
-    await otpRepository.createOtp({
+    const otpRecord = await otpRepository.createOtp({
       appId: appContext.app.appId,
       targetType: body.target_type,
       targetValue,
@@ -172,17 +186,22 @@ class OtpService {
       deviceId: body.device_id,
     });
 
-    await deliverOtp({
-      appConfig: appContext.config,
-      payload: this.buildDeliveryPayload({
-        appId: appContext.app.appId,
-        targetType: body.target_type,
-        targetValue,
-        otp,
-        purpose: body.purpose,
-        expiryMinutes: appContext.config.otpExpiryMinutes,
-      }),
-    });
+    try {
+      await deliverOtp({
+        appConfig: appContext.config,
+        payload: this.buildDeliveryPayload({
+          appId: appContext.app.appId,
+          targetType: body.target_type,
+          targetValue,
+          otp,
+          purpose: body.purpose,
+          expiryMinutes: appContext.config.otpExpiryMinutes,
+        }),
+      });
+    } catch (error) {
+      await otpRepository.deleteOtp(otpRecord.id).catch(() => null);
+      throw error;
+    }
 
     await auditService.logEvent({
       appId: appContext.app.appId,

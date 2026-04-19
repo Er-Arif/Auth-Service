@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const { env } = require("../../config/env");
 const { AppError } = require("../../utils/errors");
 const { DEFAULT_OTP_POLICY, TARGET_TYPES, DELIVERY_CHANNELS, EMAIL_PROVIDERS, SMS_PROVIDERS } = require("../../config/constants");
 const appRepository = require("./app.repository");
@@ -86,7 +87,7 @@ class AppService {
 
   async createApp({ appId, name, status, bcrypt }) {
     const rawAppKey = crypto.randomBytes(24).toString("hex");
-    const appKeyHash = await bcrypt.hash(rawAppKey, 10);
+    const appKeyHash = await bcrypt.hash(rawAppKey, env.APP_KEY_SALT_ROUNDS);
     const app = await appRepository.createApp({
       appId,
       name,
