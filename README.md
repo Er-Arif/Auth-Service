@@ -13,7 +13,7 @@ Reusable OTP authentication service built with Express, PostgreSQL, Prisma, and 
 - Internal admin APIs for app and config management
 - Audit logging, metrics, health checks, and cleanup worker scaffold
 
-See [docs/phase-status.md](/e:/MyProjects/Auth-Service/docs/phase-status.md), [docs/architecture.md](/e:/MyProjects/Auth-Service/docs/architecture.md), and [docs/integration-guide.md](/e:/MyProjects/Auth-Service/docs/integration-guide.md) for the implementation record and usage notes.
+See [phase status](docs/phase-status.md), [architecture](docs/architecture.md), and [integration guide](docs/integration-guide.md) for implementation details and usage notes.
 
 ## Folder structure
 
@@ -145,7 +145,6 @@ The seed creates two apps for local testing:
 - Development-only OTP logging is controlled by `ENABLE_DEV_OTP_LOG`.
 - `POST /apps` returns a generated `app_key` in the response as an operational addition so newly created apps can actually authenticate.
 - SMS delivery now supports MSG91 through the provider abstraction. Fill `MSG91_AUTH_KEY` and `MSG91_SMS_SENDER_ID`, then set an app config to `active_channel=sms` and `sms_provider=msg91`.
-- Git history is tracked locally phase by phase; pushing to GitHub still requires a remote to be configured.
 
 ## Deployment notes
 
